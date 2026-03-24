@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Estimating Individual Tree Height and Species from UAV Imagery">
+  <meta name="keywords" content="DINOvTree, BIRCH-Trees,
+  Tree Height Estimation, Species Identification, Remote Sensing,
+  Forest Monitoring, Drone Imagery, UAV, Computer Vision,
+  Fine-Grained Classification, Deep Learning, Biodiversity, Machine Learning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>Estimating Individual Tree Height and Species from UAV Imagery</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌳</text></svg>">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/copy-bibtex.js"></script>
+  <script type="text/javascript" async
+  src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Estimating Individual Tree Height and Species from UAV Imagery</h1>
+          
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=imQyM0QAAAAJ&hl=en">Jannik Endres</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://lefo.ca/">Etienne Laliberté</a><sup>2,1</sup>,</span>
+            <span class="author-block">
+              <a href="http://www.davidrolnick.com/">David Rolnick</a><sup>1,3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://arthurouaknine.github.io/">Arthur Ouaknine</a><sup>1,3</sup>
+            </span>
+          </div>
+
+          <div style="margin-top: 10px; display: flex; gap: 20px; align-items: center; justify-content: center; flex-wrap: wrap;">
+            <a href="https://mila.quebec/en">
+              <img src="static/images/mila_logo.svg" width="140px" alt="Mila - Quebec AI Institute logo" />
+            </a>
+            <a href="https://www.umontreal.ca/en/">
+              <img src="static/images/universite_de_montreal_logo.svg" width="150px" alt="Université de Montréal logo" />
+            </a>
+            <a href="https://www.mcgill.ca/">
+              <img src="static/images/mcgill_logo.png" width="200px" alt="McGill University logo" />
+            </a>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Mila – Quebec AI Institute,</span>
+            <span class="author-block"><sup>2</sup>Université de Montréal,</span>
+            <span class="author-block"><sup>3</sup>McGill University</span>
+          </div>
+
+
+          <div class="column has-text-centered" style="margin-top: 20px;">
+            <div class="publication-links">
+
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark" disabled>
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper (Coming Soon)</span>
+                </a>
+              </span>
+
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark" disabled>
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv (Coming Soon)</span>
+                </a>
+              </span>
+
+              <span class="link-block">
+                <a href="https://github.com/RolnickLab/DINOvTree"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+               </span>
+
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark" disabled>
+                  <span class="icon">
+                    <img src="static/images/hf-logo-monochrome.svg"
+                        alt="Hugging Face logo"
+                        style="filter: brightness(0) invert(1)">
+                  </span>
+                  <span>Benchmark (Coming Soon)</span>
+                  </a>
+               </span>
+
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark" disabled>
+                  <span class="icon">
+                    <img src="static/images/hf-logo-monochrome.svg"
+                        alt="Hugging Face logo"
+                        style="filter: brightness(0) invert(1)">
+                  </span>
+                  <span>Model Weights (Coming Soon)</span>
+                  </a>
+               </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-vcentered">
+      
+      <div class="column is-three-fifths">
+        <figure class="image">
+        <img src="static/images/figure_teaser.svg" alt="Teaser figure" style="width: 100%; height: auto; display: block;">
+      </figure>
+      </div>
+
+      <div class="column is-two-fifths">
+      <div class="content has-text-justified">
+        <p>
+          <b>TL;DR:</b>
+          <b>BIRCH-Trees</b> is the first benchmark for joint individual tree
+          height estimation and species identification from UAV images.
+          Our model, <b>DINOvTree</b>, leverages a VFM to extract features and
+          predicts the height and species of the center tree in the input image
+          with two separate heads.
+        </p>
+      </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+  
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Accurate estimation of forest biomass, a major carbon sink,
+            relies heavily on tree-level traits such as height and species.
+            Unoccupied Aerial Vehicles (UAVs) capturing high-resolution imagery
+            from a single RGB camera offer a cost-effective and scalable approach
+            for mapping and measuring individual trees.
+          </p>
+          <p>
+            We introduce BIRCH-Trees, the first benchmark for individual tree height
+            and species estimation from tree-centered UAV images,
+            spanning three datasets: temperate forests, tropical forests,
+            and boreal plantations.
+          </p>
+          <p>
+            We also present DINOvTree, a unified approach using a
+            Vision Foundation Model (VFM) backbone with task-specific heads
+            for simultaneous height and species prediction.
+            Through extensive evaluations on BIRCH-Trees, we compare DINOvTree
+            against commonly used vision methods, including VFMs,
+            as well as biological allometric equations.
+            We find that DINOvTree achieves top overall results
+            with accurate height predictions and competitive classification accuracy
+            while using only 54% to 58% of the parameters of the second-best approach.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered">
+            <div class="column is-full"> 
+
+                <h2 class="title is-3">BIRCH-Trees</h2>
+
+                <div class="content has-text-justified">
+                <p>
+                    BIRCH-Trees (<em><u>B</u>enchmark for <u>I</u>ndividual <u>R</u>ecognition of <u>C</u>lass and <u>H</u>eight of <u>Trees</u></em>)
+                    is the first benchmark for individual tree height and species estimation
+                    from tree-centered UAV images.
+                    We formulate individual tree height estimation and species identification
+                    as regression and classification tasks, respectively.
+                    We provide high-resolution RGB drone images,
+                    alongside corresponding Digital Surface Models (DSMs), of tree canopies from three distinct environments:
+                </p>
+                <ul>
+                    <li><strong>Temperate forest:</strong> Quebec Trees</li>
+                    <li><strong>Tropical forest:</strong> Barro Colorado Island (BCI)</li>
+                    <li><strong>Boreal plantation:</strong> Quebec Plantations</li>
+                </ul>
+                </div>
+
+                <h3 class="title is-4 mt-6 mb-4">Quebec Trees</h3>
+                <p class="mb-4">
+                    Representative examples from the Quebec Trees dataset test split, illustrating one example per class alongside its corresponding ground truth class and height.
+                </p>
+                
+                <div class="carousel-wrapper" style="position: relative; width: 100%;">
+                    <div id="results-carousel" class="carousel results-carousel">
+                            
+                            <div class="item img-0">
+                                <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                    <img src="static/images/examples_qt/2021_09_02_sbl_z3_rgb_tile_test_sf1p0_12872_8717_512_512_4314.png" 
+                                        alt="Abies balsamea"
+                                        loading="lazy"
+                                        style="max-height: 512px; width: auto; margin: 0 auto;">
+                                    
+                                    <div class="is-size-6 mt-2">
+                                        <span style="font-weight: bold; color: #363636;">Class: Abies balsamea</span>
+                                        <br>
+                                        <span style="font-family: monospace; color: #666;">
+                                            Height: 8.33 m
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item img-1">
+                                <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                    <img src="static/images/examples_qt/2021_09_02_sbl_z3_rgb_tile_test_sf1p0_10827_8853_512_512_2145.png" 
+                                        alt="Acer pensylvanicum" 
+                                        loading="lazy"
+                                        style="max-height: 512px; width: auto; margin: 0 auto;">
+                                    
+                                    <div class="is-size-6 mt-2">
+                                        <span style="font-weight: bold; color: #363636;">Class: Acer pensylvanicum</span>
+                                        <br>
+                                        <span style="font-family: monospace; color: #666;">
+                                            Height: 10.76 m
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item img-2">
+                                <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                    <img src="static/images/examples_qt/2021_09_02_sbl_z3_rgb_tile_test_sf1p0_10023_8279_512_512_2120.png" 
+                                        alt="Acer rubrum"
+                                        loading="lazy"
+                                        style="max-height: 512px; width: auto; margin: 0 auto;">
+                                    <div class="is-size-6 mt-2">
+                                        <span style="font-weight: bold; color: #363636;">Class: Acer rubrum</span>
+                                        <br>
+                                        <span style="font-family: monospace; color: #666;">
+                                            Height: 13.47 m
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item img-3">
+                                <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                    <img src="static/images/examples_qt/2021_09_02_sbl_z3_rgb_tile_test_sf1p0_8402_13260_512_512_1271.png" 
+                                        alt="Acer saccharum"
+                                        loading="lazy"
+                                        style="max-height: 512px; width: auto; margin: 0 auto;">
+                                    <div class="is-size-6 mt-2">
+                                        <span style="font-weight: bold; color: #363636;">Class: Acer saccharum</span>
+                                        <br>
+                                        <span style="font-family: monospace; color: #666;">
+                                            Height: 19.95 m
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item img-4">
+                                <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                    <img src="static/images/examples_qt/2021_09_02_sbl_z3_rgb_tile_test_sf1p0_13504_19909_512_512_148.png" 
+                                        alt="Betula alleghaniensis"
+                                        loading="lazy"
+                                        style="max-height: 512px; width: auto; margin: 0 auto;">
+                                    <div class="is-size-6 mt-2">
+                                        <span style="font-weight: bold; color: #363636;">Class: Betula alleghaniensis</span>
+                                        <br>
+                                        <span style="font-family: monospace; color: #666;">
+                                            Height: 20.62 m
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item img-5">
+                                <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                    <img src="static/images/examples_qt/2021_09_02_sbl_z1_rgb_tile_test_sf1p0_14751_18110_512_512_3957.png" 
+                                        alt="Betula papyrifera" 
+                                        loading="lazy"
+                                        style="max-height: 512px; width: auto; margin: 0 auto;">
+                                    <div class="is-size-6 mt-2">
+                                        <span style="font-weight: bold; color: #363636;">Class: Betula papyrifera</span>
+                                        <br>
+                                        <span style="font-family: monospace; color: #666;">
+                                            Height: 8.08 m
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item img-6">
+                                <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                    <img src="static/images/examples_qt/2021_09_02_sbl_z3_rgb_tile_test_sf1p0_14339_19379_512_512_249.png" 
+                                        alt="Fagus grandifolia" 
+                                        loading="lazy"
+                                        style="max-height: 512px; width: auto; margin: 0 auto;">
+                                    <div class="is-size-6 mt-2">
+                                        <span style="font-weight: bold; color: #363636;">Class: Fagus grandifolia</span>
+                                        <br>
+                                        <span style="font-family: monospace; color: #666;">
+                                            Height: 20.41 m
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item img-7">
+                                <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                    <img src="static/images/examples_qt/2021_09_02_sbl_z3_rgb_tile_test_sf1p0_10952_5176_512_512_1980.png" 
+                                        alt="Larix laricina"
+                                        loading="lazy"
+                                        style="max-height: 512px; width: auto; margin: 0 auto;">
+                                    <div class="is-size-6 mt-2">
+                                        <span style="font-weight: bold; color: #363636;">Class: Larix laricina</span>
+                                        <br>
+                                        <span style="font-family: monospace; color: #666;">
+                                            Height: 3.65 m
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item img-8">
+                                <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                    <img src="static/images/examples_qt/2021_09_02_sbl_z3_rgb_tile_test_sf1p0_18545_8595_512_512_3350.png" 
+                                        alt="Picea"
+                                        loading="lazy"
+                                        style="max-height: 512px; width: auto; margin: 0 auto;">
+                                    <div class="is-size-6 mt-2">
+                                        <span style="font-weight: bold; color: #363636;">Class: Picea</span>
+                                        <br>
+                                        <span style="font-family: monospace; color: #666;">
+                                            Height: 12.80 m
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item img-9">
+                                <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                    <img src="static/images/examples_qt/2021_09_02_sbl_z3_rgb_tile_test_sf1p0_15644_7223_512_512_4001.png" 
+                                        alt="Pinus strobus" 
+                                        loading="lazy"
+                                        style="max-height: 512px; width: auto; margin: 0 auto;">
+                                    <div class="is-size-6 mt-2">
+                                        <span style="font-weight: bold; color: #363636;">Class: Pinus strobus</span>
+                                        <br>
+                                        <span style="font-family: monospace; color: #666;">
+                                            Height: 7.86 m
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item img-10">
+                                <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                    <img src="static/images/examples_qt/2021_09_02_sbl_z3_rgb_tile_test_sf1p0_16786_12118_512_512_2511.png" 
+                                        alt="Populus"
+                                        loading="lazy"
+                                        style="max-height: 512px; width: auto; margin: 0 auto;">
+                                    <div class="is-size-6 mt-2">
+                                        <span style="font-weight: bold; color: #363636;">Class: Populus</span>
+                                        <br>
+                                        <span style="font-family: monospace; color: #666;">
+                                            Height: 13.25 m
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item img-11">
+                                <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                    <img src="static/images/examples_qt/2021_09_02_sbl_z3_rgb_tile_test_sf1p0_13713_8709_512_512_4189.png" 
+                                        alt="Thuja occidentalis"
+                                        loading="lazy"
+                                        style="max-height: 512px; width: auto; margin: 0 auto;">
+                                    <div class="is-size-6 mt-2">
+                                        <span style="font-weight: bold; color: #363636;">Class: Thuja occidentalis</span>
+                                        <br>
+                                        <span style="font-family: monospace; color: #666;">
+                                            Height: 12.12 m
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item img-12">
+                                <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                    <img src="static/images/examples_qt/2021_09_02_sbl_z1_rgb_tile_test_sf1p0_12403_28522_512_512_1072.png" 
+                                        alt="Tsuga canadensis"
+                                        loading="lazy"
+                                        style="max-height: 512px; width: auto; margin: 0 auto;">
+                                    <div class="is-size-6 mt-2">
+                                        <span style="font-weight: bold; color: #363636;">Class: Tsuga canadensis</span>
+                                        <br>
+                                        <span style="font-family: monospace; color: #666;">
+                                            Height: 17.57 m
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item img-13">
+                                <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                    <img src="static/images/examples_qt/2021_09_02_sbl_z3_rgb_tile_test_sf1p0_8927_10265_512_512_4579.png" 
+                                        alt="dead"
+                                        loading="lazy"
+                                        style="max-height: 512px; width: auto; margin: 0 auto;">
+                                    <div class="is-size-6 mt-2">
+                                        <span style="font-weight: bold; color: #363636;">Class: dead</span>
+                                        <br>
+                                        <span style="font-family: monospace; color: #666;">
+                                            Height: 6.40 m
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                </div>
+
+                <h3 class="title is-4 mt-6 mb-4">BCI</h3>
+                <p class="mb-4">
+                    Representative examples from the BCI dataset test split, illustrating one example per class alongside its corresponding ground truth class and height.
+                </p>
+
+                <div class="carousel-wrapper" style="position: relative; width: 100%;">
+                    <div id="results-carousel-bci" class="carousel results-carousel">
+                            
+                        <div class="item img-0">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_25828_7841_512_512_1231.png" 
+                                    alt="Anacardiaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Anacardiaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 28.04 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-1">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_24788_7675_512_512_1228.png" 
+                                    alt="Apocynaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Apocynaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 37.32 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-2">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_25232_3262_512_512_2114.png" 
+                                    alt="Arecaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Arecaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 15.48 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-3">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_25830_3406_512_512_2124.png" 
+                                    alt="Bignoniaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Bignoniaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 41.18 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-4">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_22126_8038_512_512_1156.png" 
+                                    alt="Burseraceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Burseraceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 25.99 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-5">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_24852_5268_512_512_1779.png" 
+                                    alt="Cordiaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Cordiaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 24.39 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-6">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_23707_5603_512_512_1703.png" 
+                                    alt="Euphorbiaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Euphorbiaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 36.89 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-7">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_19735_5596_512_512_1636.png" 
+                                    alt="Fabaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Fabaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 22.54 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-8">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_22264_4514_512_512_1661.png" 
+                                    alt="Lauraceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Lauraceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 28.80 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-9">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_19441_4537_512_512_1615.png" 
+                                    alt="Lecythidaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Lecythidaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 17.42 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-10">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_24406_7680_512_512_1209.png" 
+                                    alt="Malvaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Malvaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 24.61 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-11">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_20231_5219_512_512_1647.png" 
+                                    alt="Meliaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Meliaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 29.38 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-12">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_22741_8213_512_512_1194.png" 
+                                    alt="Moraceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Moraceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 42.40 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-13">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_25606_3214_512_512_2119.png" 
+                                    alt="Myristicaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Myristicaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 34.43 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-14">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_19731_7443_512_512_1105.png" 
+                                    alt="Nyctaginaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Nyctaginaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 28.32 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-15">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_20735_3403_512_512_2060.png" 
+                                    alt="Phyllanthaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Phyllanthaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 30.09 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-16">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_23347_7180_512_512_1206.png" 
+                                    alt="Putranjivaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Putranjivaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 30.38 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-17">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_20888_4770_512_512_1681.png" 
+                                    alt="Rubiaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Rubiaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 32.47 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-18">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_20726_7867_512_512_1125.png" 
+                                    alt="Rutaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Rutaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 30.40 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-19">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_23387_4215_512_512_2112.png" 
+                                    alt="Sapotaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Sapotaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 27.28 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-20">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_bci/bci_50ha_2022_09_29_orthomosaic_tile_test_sf1p0_25787_4063_512_512_2129.png" 
+                                    alt="Urticaceae"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Urticaceae</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 41.36 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <h3 class="title is-4 mt-6 mb-4">Quebec Plantations</h3>
+                <p class="mb-4">
+                    Representative examples from the Quebec Plantations dataset test split, illustrating one example per class alongside its corresponding ground truth class and height.
+                </p>
+
+                <div class="carousel-wrapper" style="position: relative; width: 100%;">
+                    <div id="results-carousel-qp" class="carousel results-carousel">
+                            
+                        <div class="item img-0">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_qp/20230608_cbbernard3_p1_rgb_tile_test_sf1p0_22658_59060_512_512_1112.png" 
+                                    alt="Acer saccharum"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Acer saccharum</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 1.71 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-1">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_qp/20230608_cbpapinas_p1_rgb_tile_test_sf1p0_30232_121004_512_512_387.png" 
+                                    alt="Betula alleghaniensis"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Betula alleghaniensis</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 4.44 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-2">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_qp/20230712_afcagauthmelpin_itrf20_p1_rgb_tile_test_sf1p0_55209_67568_512_512_1690.png" 
+                                    alt="Picea glauca"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Picea glauca</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 2.15 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-3">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_qp/20230608_cbbernard3_p1_rgb_tile_test_sf1p0_32008_75184_512_512_492.png" 
+                                    alt="Picea mariana"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Picea mariana</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 2.36 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-4">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_qp/20230606_cbblackburn4_p1_rgb_tile_test_sf1p0_46678_26987_512_512_263.png" 
+                                    alt="Pinus banksiana"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Pinus banksiana</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 5.45 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-5">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_qp/20230608_cbpapinas_p1_rgb_tile_test_sf1p0_20888_102729_512_512_1175.png" 
+                                    alt="Pinus strobus"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Pinus strobus</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 4.68 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-6">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_qp/20230606_cbblackburn3_p1_rgb_tile_test_sf1p0_11618_17286_512_512_39.png" 
+                                    alt="Thuja occidentalis"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Thuja occidentalis</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 6.20 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item img-7">
+                            <div class="has-text-centered p-2 box" style="background-color: #fafafa; border-radius: 8px;">
+                                <img src="static/images/examples_qp/20230606_cbblackburn4_p1_rgb_tile_test_sf1p0_12526_26643_512_512_375.png" 
+                                    alt="Ulmus americana"
+                                    loading="lazy"
+                                    style="max-height: 512px; width: auto; margin: 0 auto;">
+                                <div class="is-size-6 mt-2">
+                                    <span style="font-weight: bold; color: #363636;">Class: Ulmus americana</span>
+                                    <br>
+                                    <span style="font-family: monospace; color: #666;">Height: 2.38 m</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">DINOvTree</h2>
+        
+      <div class="columns is-centered">
+          <div class="column is-full-width">
+          
+            <figure style="margin: 0;">
+              <img src="static/images/figure_method.svg" alt="DINOvTree method figure" style="width: 100%; height: auto; display: block;">
+              
+              <figcaption class="content has-text-justified mt-4">
+                A shared VFM (<span class="ourblue">blue</span>) extracts features from an RGB image.
+                In the height estimation head (<span class="ourorange">orange</span>), a learnable height query
+                cross-attends to adapted patch tokens to predict \( \hat{h} \).
+                In the classification head (<span class="ouryellow">yellow</span>), a learnable classification query
+                cross-attends to adapted patch tokens to obtain a classification token.
+                We then concatenate it with the VFM [CLS] token to predict \( \hat{\mathbf{p}} \).
+                The total loss \( \mathcal{L} \) is the weighted sum
+                of the height estimation loss \( \mathcal{L}_H(h, \hat{h}) \) and the classification loss \( \mathcal{L}_S(\hat{\mathbf{p}}, c) \)
+                supervised by ground truth height \( h \) and class \( c \).
+              </figcaption>
+            </figure>
+        
+        </div>
+      </div>
+    </div>
+</section>
+
+
+<section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Results</h2>
+
+          <div class="content has-text-justified mt-4 mb-6">
+            <p>
+                We compare our DINOvTree against competing methods in terms of parameter count,
+                height estimation, and classification on the three datasets of BIRCH-Trees.
+                We group models by parameter count: fewer than 300M (top) and more than 300M (bottom).
+                For competing methods, 'Param.' denotes combined parameters of two independently-trained task-specific models.
+                We report the mean &plusmn; standard error over 5 seeds.
+                <strong>Bold</strong> and <u>underline</u> denote best and second-best.
+                &ast; indicates an oracle with ground truth class and segmentation;
+                <sup>&dagger;</sup> denotes the Mask R-CNN variant from
+                <a href="https://ui.adsabs.harvard.edu/abs/2021JPRS..178..112H/abstract">Hao et al.</a> and
+                <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4462852">Fu et al.</a>;
+                <span style="color: #a0c4ff;">&#10052;</span> indicates a frozen backbone.
+            </p>
+          </div>
+
+          <h3 class="title is-4 mt-6 mb-4">Quebec Trees</h3>
+          <div class="table-container">
+            <table class="table is-striped is-bordered is-hoverable is-fullwidth">
+                </table>
+          </div>
+
+            <div class="table-container">
+            <table class="table is-striped is-bordered is-hoverable is-fullwidth">
+                <thead>
+                <tr>
+                    <th rowspan="2" class="align-middle" style="vertical-align: middle; width: 18%;">Method</th>
+                    <th rowspan="2" class="has-text-centered align-middle" style="vertical-align: middle;">Param.<br>(M) &#9660;</th>
+                    <th colspan="4" class="has-text-centered">Height Estimation</th>
+                    <th colspan="2" class="has-text-centered">Classification</th>
+                </tr>
+                <tr>
+                    <th class="has-text-centered" style="font-weight: normal;">&delta;<sub>1.25</sub> (%) &#9650;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">MSLE (10<sup>-2</sup>) &#9660;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">MAE (m) &#9660;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">RMSE (m) &#9660;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">F1 (%) &#9650;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">Acc (%) &#9650;</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Allometric equations&ast;</td>
+                    <td class="has-text-centered"><b>0</b></td>
+                    <td class="has-text-centered">48.74</td>
+                    <td class="has-text-centered">10.97</td>
+                    <td class="has-text-centered">2.98</td>
+                    <td class="has-text-centered">3.73</td>
+                    <td class="has-text-centered">-</td>
+                    <td class="has-text-centered">-</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/1703.06870" target="_blank">Mask R-CNN</a><sup>&dagger;</sup>
+                    </td>
+                    <td class="has-text-centered">88</td>
+                    <td class="has-text-centered">74.34 &plusmn; 0.32</td>
+                    <td class="has-text-centered">4.09 &plusmn; 0.06</td>
+                    <td class="has-text-centered">1.73 &plusmn; 0.02</td>
+                    <td class="has-text-centered">2.26 &plusmn; 0.02</td>
+                    <td class="has-text-centered">65.49 &plusmn; 0.45</td>
+                    <td class="has-text-centered">65.86 &plusmn; 0.60</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/1512.03385" target="_blank">ResNet50</a>
+                    </td>
+                    <td class="has-text-centered"><u>47</u></td>
+                    <td class="has-text-centered">68.16 &plusmn; 0.13</td>
+                    <td class="has-text-centered">5.45 &plusmn; 0.09</td>
+                    <td class="has-text-centered">1.96 &plusmn; 0.01</td>
+                    <td class="has-text-centered">2.48 &plusmn; 0.01</td>
+                    <td class="has-text-centered">76.67 &plusmn; 0.38</td>
+                    <td class="has-text-centered">74.01 &plusmn; 0.50</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/1512.03385" target="_blank">ResNet50</a> w/ DSM
+                    </td>
+                    <td class="has-text-centered"><u>47</u></td>
+                    <td class="has-text-centered">68.11 &plusmn; 0.16</td>
+                    <td class="has-text-centered">5.12 &plusmn; 0.05</td>
+                    <td class="has-text-centered">1.96 &plusmn; 0.01</td>
+                    <td class="has-text-centered">2.47 &plusmn; 0.01</td>
+                    <td class="has-text-centered">76.36 &plusmn; 0.36</td>
+                    <td class="has-text-centered">73.58 &plusmn; 0.50</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2201.03545" target="_blank">ConvNext</a>-B
+                    </td>
+                    <td class="has-text-centered">175</td>
+                    <td class="has-text-centered">84.82 &plusmn; 0.39</td>
+                    <td class="has-text-centered">2.47 &plusmn; 0.08</td>
+                    <td class="has-text-centered">1.32 &plusmn; 0.02</td>
+                    <td class="has-text-centered">1.71 &plusmn; 0.02</td>
+                    <td class="has-text-centered">84.87 &plusmn; 0.42</td>
+                    <td class="has-text-centered">82.91 &plusmn; 0.40</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2111.09883" target="_blank">SwinV2</a>-B
+                    </td>
+                    <td class="has-text-centered">174</td>
+                    <td class="has-text-centered">77.39 &plusmn; 0.87</td>
+                    <td class="has-text-centered">3.38 &plusmn; 0.12</td>
+                    <td class="has-text-centered">1.73 &plusmn; 0.04</td>
+                    <td class="has-text-centered">2.17 &plusmn; 0.05</td>
+                    <td class="has-text-centered">85.78 &plusmn; 0.45</td>
+                    <td class="has-text-centered">83.77 &plusmn; 0.56</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2407.08083" target="_blank">MambaVision</a>-B
+                    </td>
+                    <td class="has-text-centered">193</td>
+                    <td class="has-text-centered">68.47 &plusmn; 0.70</td>
+                    <td class="has-text-centered">60.19 &plusmn; 4.47</td>
+                    <td class="has-text-centered">2.36 &plusmn; 0.06</td>
+                    <td class="has-text-centered">3.42 &plusmn; 0.10</td>
+                    <td class="has-text-centered">85.37 &plusmn; 0.28</td>
+                    <td class="has-text-centered">83.42 &plusmn; 0.40</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2412.14123" target="_blank">AnySat</a>
+                    </td>
+                    <td class="has-text-centered">250</td>
+                    <td class="has-text-centered">78.03 &plusmn; 0.28</td>
+                    <td class="has-text-centered">3.35 &plusmn; 0.05</td>
+                    <td class="has-text-centered">1.57 &plusmn; 0.01</td>
+                    <td class="has-text-centered">2.04 &plusmn; 0.01</td>
+                    <td class="has-text-centered">69.99 &plusmn; 0.61</td>
+                    <td class="has-text-centered">68.98 &plusmn; 0.44</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2504.13181" target="_blank">PECore</a>-B
+                    </td>
+                    <td class="has-text-centered">187</td>
+                    <td class="has-text-centered">84.85 &plusmn; 1.03</td>
+                    <td class="has-text-centered">2.31 &plusmn; 0.14</td>
+                    <td class="has-text-centered">1.29 &plusmn; 0.04</td>
+                    <td class="has-text-centered">1.68 &plusmn; 0.05</td>
+                    <td class="has-text-centered">86.82 &plusmn; 0.33</td>
+                    <td class="has-text-centered">84.57 &plusmn; 0.53</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2508.10104" target="_blank">DINOv3</a>-B
+                    </td>
+                    <td class="has-text-centered">171</td>
+                    <td class="has-text-centered"><u>86.35</u> &plusmn; 0.26</td>
+                    <td class="has-text-centered"><u>2.10</u> &plusmn; 0.04</td>
+                    <td class="has-text-centered"><u>1.25</u> &plusmn; 0.01</td>
+                    <td class="has-text-centered"><u>1.62</u> &plusmn; 0.01</td>
+                    <td class="has-text-centered"><b>87.46</b> &plusmn; 0.53</td>
+                    <td class="has-text-centered"><b>85.10</b> &plusmn; 0.80</td>
+                </tr>
+                <tr>
+                    <td>
+                        DINOvTree-B (Ours)
+                    </td>
+                    <td class="has-text-centered">100</td>
+                    <td class="has-text-centered"><b>88.29</b> &plusmn; 0.32</td>
+                    <td class="has-text-centered"><b>1.85</b> &plusmn; 0.05</td>
+                    <td class="has-text-centered"><b>1.17</b> &plusmn; 0.02</td>
+                    <td class="has-text-centered"><b>1.54</b> &plusmn; 0.02</td>
+                    <td class="has-text-centered"><u>86.89</u> &plusmn; 0.31</td>
+                    <td class="has-text-centered"><u>85.03</u> &plusmn; 0.45</td>
+                </tr>
+                
+                <tr style="border-top: 3px solid #363636;">
+                    <td>
+                        <a href="https://arxiv.org/abs/2508.10104" target="_blank">DINOv3</a>-L-Sat (<span style="color: #a0c4ff;">&#10052;</span>)
+                    </td>
+                    <td class="has-text-centered"><u>606</u></td>
+                    <td class="has-text-centered">53.07 &plusmn; 0.04</td>
+                    <td class="has-text-centered">10.71 &plusmn; 0.02</td>
+                    <td class="has-text-centered">2.81 &plusmn; 0.00</td>
+                    <td class="has-text-centered">3.40 &plusmn; 0.00</td>
+                    <td class="has-text-centered">27.43 &plusmn; 0.12</td>
+                    <td class="has-text-centered">25.03 &plusmn; 0.11</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2508.10104" target="_blank">DINOv3</a>-L (<span style="color: #a0c4ff;">&#10052;</span>)
+                    </td>
+                    <td class="has-text-centered"><u>606</u></td>
+                    <td class="has-text-centered">58.28 &plusmn; 0.06</td>
+                    <td class="has-text-centered">8.42 &plusmn; 0.01</td>
+                    <td class="has-text-centered">2.48 &plusmn; 0.00</td>
+                    <td class="has-text-centered">3.06 &plusmn; 0.00</td>
+                    <td class="has-text-centered">28.76 &plusmn; 0.07</td>
+                    <td class="has-text-centered">26.64 &plusmn; 0.06</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2508.10104" target="_blank">DINOv3</a>-L
+                    </td>
+                    <td class="has-text-centered"><u>606</u></td>
+                    <td class="has-text-centered"><u>88.03</u> &plusmn; 0.38</td>
+                    <td class="has-text-centered"><u>1.86</u> &plusmn; 0.04</td>
+                    <td class="has-text-centered"><u>1.17</u> &plusmn; 0.01</td>
+                    <td class="has-text-centered"><u>1.53</u> &plusmn; 0.01</td>
+                    <td class="has-text-centered"><b>88.85</b> &plusmn; 0.37</td>
+                    <td class="has-text-centered"><u>86.92</u> &plusmn; 0.57</td>
+                </tr>
+                <tr>
+                    <td>
+                        DINOvTree-L (Ours)
+                    </td>
+                    <td class="has-text-centered"><b>328</b></td>
+                    <td class="has-text-centered"><b>89.28</b> &plusmn; 0.28</td>
+                    <td class="has-text-centered"><b>1.71</b> &plusmn; 0.04</td>
+                    <td class="has-text-centered"><b>1.12</b> &plusmn; 0.02</td>
+                    <td class="has-text-centered"><b>1.46</b> &plusmn; 0.02</td>
+                    <td class="has-text-centered"><u>88.38</u> &plusmn; 0.38</td>
+                    <td class="has-text-centered"><b>87.25</b> &plusmn; 0.36</td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+
+            <h3 class="title is-4 mt-6 mb-4">BCI</h3>
+          <div class="table-container">
+            <table class="table is-striped is-bordered is-hoverable is-fullwidth">
+                </table>
+          </div>
+
+            <div class="table-container">
+            <table class="table is-striped is-bordered is-hoverable is-fullwidth">
+                <thead>
+                <tr>
+                    <th rowspan="2" class="align-middle" style="vertical-align: middle; width: 18%; white-space: nowrap;">Method</th>
+                    <th rowspan="2" class="has-text-centered align-middle" style="vertical-align: middle;">Param.<br>(M) &#9660;</th>
+                    <th colspan="4" class="has-text-centered">Height Estimation</th>
+                    <th colspan="2" class="has-text-centered">Classification</th>
+                </tr>
+                <tr>
+                    <th class="has-text-centered" style="font-weight: normal;">&delta;<sub>1.25</sub> (%) &#9650;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">MSLE (10<sup>-2</sup>) &#9660;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">MAE (m) &#9660;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">RMSE (m) &#9660;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">F1 (%) &#9650;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">Acc (%) &#9650;</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2201.03545" target="_blank">ConvNext</a>-B
+                    </td>
+                    <td class="has-text-centered">175</td>
+                    <td class="has-text-centered">85.91 &plusmn; 0.96</td>
+                    <td class="has-text-centered">2.53 &plusmn; 0.07</td>
+                    <td class="has-text-centered">3.68 &plusmn; 0.09</td>
+                    <td class="has-text-centered">4.75 &plusmn; 0.08</td>
+                    <td class="has-text-centered">45.99 &plusmn; 0.55</td>
+                    <td class="has-text-centered"><u>48.16</u> &plusmn; 0.63</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2111.09883" target="_blank">SwinV2</a>-B
+                    </td>
+                    <td class="has-text-centered">174</td>
+                    <td class="has-text-centered">86.38 &plusmn; 0.69</td>
+                    <td class="has-text-centered">2.53 &plusmn; 0.09</td>
+                    <td class="has-text-centered">3.51 &plusmn; 0.07</td>
+                    <td class="has-text-centered">4.64 &plusmn; 0.07</td>
+                    <td class="has-text-centered">45.73 &plusmn; 1.21</td>
+                    <td class="has-text-centered">46.94 &plusmn; 1.42</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2504.13181" target="_blank">PECore</a>-B
+                    </td>
+                    <td class="has-text-centered">187</td>
+                    <td class="has-text-centered"><u>89.22</u> &plusmn; 0.49</td>
+                    <td class="has-text-centered"><u>2.18</u> &plusmn; 0.07</td>
+                    <td class="has-text-centered"><u>3.21</u> &plusmn; 0.04</td>
+                    <td class="has-text-centered"><u>4.24</u> &plusmn; 0.06</td>
+                    <td class="has-text-centered">41.92 &plusmn; 1.94</td>
+                    <td class="has-text-centered">42.31 &plusmn; 1.59</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2508.10104" target="_blank">DINOv3</a>-B
+                    </td>
+                    <td class="has-text-centered"><u>171</u></td>
+                    <td class="has-text-centered">85.74 &plusmn; 0.69</td>
+                    <td class="has-text-centered">2.61 &plusmn; 0.09</td>
+                    <td class="has-text-centered">3.61 &plusmn; 0.07</td>
+                    <td class="has-text-centered">4.69 &plusmn; 0.07</td>
+                    <td class="has-text-centered"><u>46.44</u> &plusmn; 1.32</td>
+                    <td class="has-text-centered">46.44 &plusmn; 1.32</td>
+                </tr>
+                <tr>
+                    <td>
+                        DINOvTree-B (Ours)
+                    </td>
+                    <td class="has-text-centered"><b>100</b></td>
+                    <td class="has-text-centered"><b>91.25</b> &plusmn; 0.40</td>
+                    <td class="has-text-centered"><b>1.95</b> &plusmn; 0.05</td>
+                    <td class="has-text-centered"><b>3.11</b> &plusmn; 0.08</td>
+                    <td class="has-text-centered"><b>4.14</b> &plusmn; 0.10</td>
+                    <td class="has-text-centered"><b>48.96</b> &plusmn; 0.85</td>
+                    <td class="has-text-centered"><b>50.22</b> &plusmn; 1.00</td>
+                </tr>
+                
+                <tr style="border-top: 3px solid #363636;">
+                    <td>
+                        <a href="https://arxiv.org/abs/2201.03545" target="_blank">ConvNext</a>-L
+                    </td>
+                    <td class="has-text-centered"><u>392</u></td>
+                    <td class="has-text-centered">86.14 &plusmn; 0.74</td>
+                    <td class="has-text-centered">2.49 &plusmn; 0.07</td>
+                    <td class="has-text-centered">3.63 &plusmn; 0.10</td>
+                    <td class="has-text-centered">4.71 &plusmn; 0.09</td>
+                    <td class="has-text-centered">46.98 &plusmn; 0.70</td>
+                    <td class="has-text-centered">48.79 &plusmn; 0.71</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2504.13181" target="_blank">PECore</a>-L
+                    </td>
+                    <td class="has-text-centered">634</td>
+                    <td class="has-text-centered"><u>91.88</u> &plusmn; 0.49</td>
+                    <td class="has-text-centered"><u>1.93</u> &plusmn; 0.03</td>
+                    <td class="has-text-centered"><u>3.01</u> &plusmn; 0.02</td>
+                    <td class="has-text-centered"><u>3.99</u> &plusmn; 0.03</td>
+                    <td class="has-text-centered">51.93 &plusmn; 1.17</td>
+                    <td class="has-text-centered">52.97 &plusmn; 0.59</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2508.10104" target="_blank">DINOv3</a>-L
+                    </td>
+                    <td class="has-text-centered">606</td>
+                    <td class="has-text-centered">86.78 &plusmn; 1.39</td>
+                    <td class="has-text-centered">2.32 &plusmn; 0.12</td>
+                    <td class="has-text-centered">3.41 &plusmn; 0.10</td>
+                    <td class="has-text-centered">4.44 &plusmn; 0.11</td>
+                    <td class="has-text-centered"><u>53.49</u> &plusmn; 0.61</td>
+                    <td class="has-text-centered"><u>53.87</u> &plusmn; 1.20</td>
+                </tr>
+                <tr>
+                    <td>
+                        DINOvTree-L (Ours)
+                    </td>
+                    <td class="has-text-centered"><b>328</b></td>
+                    <td class="has-text-centered"><b>94.14</b> &plusmn; 0.23</td>
+                    <td class="has-text-centered"><b>1.68</b> &plusmn; 0.01</td>
+                    <td class="has-text-centered"><b>2.75</b> &plusmn; 0.01</td>
+                    <td class="has-text-centered"><b>3.75</b> &plusmn; 0.02</td>
+                    <td class="has-text-centered"><b>54.39</b> &plusmn; 0.67</td>
+                    <td class="has-text-centered"><b>55.58</b> &plusmn; 0.63</td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+
+            <h3 class="title is-4 mt-6 mb-4">Quebec Plantations</h3>
+          <div class="table-container">
+            <table class="table is-striped is-bordered is-hoverable is-fullwidth">
+                </table>
+          </div>
+
+            <div class="table-container">
+            <table class="table is-striped is-bordered is-hoverable is-fullwidth">
+                <thead>
+                <tr>
+                    <th rowspan="2" class="align-middle" style="vertical-align: middle; width: 18%; white-space: nowrap;">Method</th>
+                    <th rowspan="2" class="has-text-centered align-middle" style="vertical-align: middle;">Param.<br>(M) &#9660;</th>
+                    <th colspan="4" class="has-text-centered">Height Estimation</th>
+                    <th colspan="2" class="has-text-centered">Classification</th>
+                </tr>
+                <tr>
+                    <th class="has-text-centered" style="font-weight: normal;">&delta;<sub>1.25</sub> (%) &#9650;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">MSLE (10<sup>-2</sup>) &#9660;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">MAE (m) &#9660;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">RMSE (m) &#9660;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">F1 (%) &#9650;</th>
+                    <th class="has-text-centered" style="font-weight: normal;">Acc (%) &#9650;</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2201.03545" target="_blank">ConvNext</a>-B
+                    </td>
+                    <td class="has-text-centered">175</td>
+                    <td class="has-text-centered">84.70 &plusmn; 0.31</td>
+                    <td class="has-text-centered">1.63 &plusmn; 0.04</td>
+                    <td class="has-text-centered">0.39 &plusmn; 0.00</td>
+                    <td class="has-text-centered">0.61 &plusmn; 0.01</td>
+                    <td class="has-text-centered"><u>83.78</u> &plusmn; 1.47</td>
+                    <td class="has-text-centered"><b>85.95</b> &plusmn; 1.47</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2111.09883" target="_blank">SwinV2</a>-B
+                    </td>
+                    <td class="has-text-centered">174</td>
+                    <td class="has-text-centered">80.37 &plusmn; 0.58</td>
+                    <td class="has-text-centered">2.16 &plusmn; 0.11</td>
+                    <td class="has-text-centered">0.47 &plusmn; 0.01</td>
+                    <td class="has-text-centered">0.71 &plusmn; 0.02</td>
+                    <td class="has-text-centered">79.33 &plusmn; 2.34</td>
+                    <td class="has-text-centered">80.21 &plusmn; 2.22</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2504.13181" target="_blank">PECore</a>-B
+                    </td>
+                    <td class="has-text-centered">187</td>
+                    <td class="has-text-centered">84.57 &plusmn; 0.31</td>
+                    <td class="has-text-centered">1.56 &plusmn; 0.04</td>
+                    <td class="has-text-centered">0.39 &plusmn; 0.01</td>
+                    <td class="has-text-centered">0.58 &plusmn; 0.01</td>
+                    <td class="has-text-centered"><b>84.34</b> &plusmn; 1.36</td>
+                    <td class="has-text-centered"><u>84.67</u> &plusmn; 1.92</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2508.10104" target="_blank">DINOv3</a>-B
+                    </td>
+                    <td class="has-text-centered"><u>171</u></td>
+                    <td class="has-text-centered"><b>86.71</b> &plusmn; 0.39</td>
+                    <td class="has-text-centered"><b>1.48</b> &plusmn; 0.04</td>
+                    <td class="has-text-centered"><b>0.37</b> &plusmn; 0.00</td>
+                    <td class="has-text-centered"><u>0.58</u> &plusmn; 0.01</td>
+                    <td class="has-text-centered">82.56 &plusmn; 1.86</td>
+                    <td class="has-text-centered">84.00 &plusmn; 1.76</td>
+                </tr>
+                <tr>
+                    <td>
+                        DINOvTree-B (Ours)
+                    </td>
+                    <td class="has-text-centered"><b>100</b></td>
+                    <td class="has-text-centered"><u>85.13</u> &plusmn; 0.40</td>
+                    <td class="has-text-centered"><u>1.54</u> &plusmn; 0.03</td>
+                    <td class="has-text-centered"><u>0.38</u> &plusmn; 0.00</td>
+                    <td class="has-text-centered"><b>0.57</b> &plusmn; 0.01</td>
+                    <td class="has-text-centered">81.88 &plusmn; 1.20</td>
+                    <td class="has-text-centered">83.97 &plusmn; 0.45</td>
+                </tr>
+                
+                <tr style="border-top: 3px solid #363636;">
+                    <td>
+                        <a href="https://arxiv.org/abs/2201.03545" target="_blank">ConvNext</a>-L
+                    </td>
+                    <td class="has-text-centered"><u>392</u></td>
+                    <td class="has-text-centered">84.34 &plusmn; 0.32</td>
+                    <td class="has-text-centered">1.65 &plusmn; 0.02</td>
+                    <td class="has-text-centered">0.40 &plusmn; 0.00</td>
+                    <td class="has-text-centered">0.61 &plusmn; 0.01</td>
+                    <td class="has-text-centered">84.46 &plusmn; 0.45</td>
+                    <td class="has-text-centered">85.25 &plusmn; 0.87</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2504.13181" target="_blank">PECore</a>-L
+                    </td>
+                    <td class="has-text-centered">634</td>
+                    <td class="has-text-centered"><b>86.74</b> &plusmn; 0.74</td>
+                    <td class="has-text-centered"><u>1.44</u> &plusmn; 0.04</td>
+                    <td class="has-text-centered"><b>0.36</b> &plusmn; 0.01</td>
+                    <td class="has-text-centered"><u>0.58</u> &plusmn; 0.01</td>
+                    <td class="has-text-centered"><u>86.61</u> &plusmn; 0.70</td>
+                    <td class="has-text-centered"><u>86.90</u> &plusmn; 1.35</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://arxiv.org/abs/2508.10104" target="_blank">DINOv3</a>-L
+                    </td>
+                    <td class="has-text-centered">606</td>
+                    <td class="has-text-centered"><u>86.26</u> &plusmn; 0.59</td>
+                    <td class="has-text-centered"><b>1.39</b> &plusmn; 0.03</td>
+                    <td class="has-text-centered"><b>0.36</b> &plusmn; 0.00</td>
+                    <td class="has-text-centered"><b>0.57</b> &plusmn; 0.01</td>
+                    <td class="has-text-centered">85.94 &plusmn; 0.37</td>
+                    <td class="has-text-centered">85.80 &plusmn; 0.38</td>
+                </tr>
+                <tr>
+                    <td>
+                        DINOvTree-L (Ours)
+                    </td>
+                    <td class="has-text-centered"><b>328</b></td>
+                    <td class="has-text-centered">85.09 &plusmn; 0.26</td>
+                    <td class="has-text-centered">1.47 &plusmn; 0.02</td>
+                    <td class="has-text-centered">0.37 &plusmn; 0.00</td>
+                    <td class="has-text-centered"><u>0.58</u> &plusmn; 0.01</td>
+                    <td class="has-text-centered"><b>87.80</b> &plusmn; 1.19</td>
+                    <td class="has-text-centered"><b>87.63</b> &plusmn; 1.33</td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+      
+        </div>
+    </div>
+  </section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3">BibTeX</h2>
+    <div style="position: relative;">
+      <button class="button is-small is-light" id="copy-bibtex-btn"style="position: absolute; top: 5px; right: 5px; z-index: 5;">
+        <span class="icon is-small">
+          <i class="fas fa-copy"></i>
+        </span>
+        <span>Copy</span>
+      </button>
+    <pre><code id="bibtex-content">@article{endres2026treeheightspecies,
+  title     = {Estimating Individual Tree Height and Species from UAV Imagery},
+  author    = {Endres, Jannik and Lalibert{\'e}, Etienne and Rolnick, David and Ouaknine, Arthur},
+  journal   = {arxiv:ToDo [cs.CV]},
+  year      = {2026}
+}</code></pre>
+  </div>
+  </div>
+</section>
+
+
+<footer class="footer" style="padding: 1.5rem 1rem;">
+  <div class="container">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This page is based on the <a href="https://github.com/nerfies/nerfies.github.io" target="_blank">Nerfies</a> project page.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
