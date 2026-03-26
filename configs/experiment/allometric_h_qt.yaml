@@ -1,0 +1,14 @@
+# @package _global_
+
+exp_name: allometric_h_qt
+seed: 0
+debug: false
+
+tasks:
+  - classification
+  - segmentation
+  - height
+
+defaults:
+  - override /dataset: quebec_trees
+  - override /model: allometric

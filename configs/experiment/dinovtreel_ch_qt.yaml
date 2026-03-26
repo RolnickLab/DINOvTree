@@ -1,0 +1,16 @@
+# @package _global_
+
+exp_name: dinovtree_ch_qt
+seed: 3
+debug: false
+
+tasks:
+  - classification
+  - height
+
+defaults:
+  - override /dataset: quebec_trees
+  - override /model: dinovtree
+
+model:
+  backbone_version: dinov3_vitl16

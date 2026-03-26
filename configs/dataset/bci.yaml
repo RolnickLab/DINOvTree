@@ -1,0 +1,20 @@
+dataset_name: bci
+data_path: ${hydra:runtime.cwd}/birch-trees/datasets/bci
+categories_path: ${hydra:runtime.cwd}/birch-trees/datasets/bci/bci_categories.json
+stats_id_path: ${hydra:runtime.cwd}/birch-trees/datasets/bci/stats_bci_by_id.json
+allometry_path: ${hydra:runtime.cwd}/birch-trees/datasets/bci/tree_allometry_regression_results_log_bci.csv
+n_classes: 31
+exclude_classes:
+  - 15 # "Other"
+  - 8 # "Annonaceae"
+  - 26 # "Chrysobalanaceae"
+  - 29 # "Combretaceae"
+  - 25 # "Salicaceae"
+  - 30 # "Melastomataceae"
+  - 16 # "Simaroubaceae"
+  - 24 # "Araliaceae"
+  - 27 # "Cannabaceae"
+  - 31 # "Calophyllaceae"
+height_attr: chm_p99_b10
+image_size: 512
+max_height: 51.0

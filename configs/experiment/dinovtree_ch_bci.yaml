@@ -1,0 +1,13 @@
+# @package _global_
+
+exp_name: dinovtree_ch_bci
+seed: 3
+debug: false
+
+tasks:
+  - classification
+  - height
+
+defaults:
+  - override /dataset: bci
+  - override /model: dinovtree

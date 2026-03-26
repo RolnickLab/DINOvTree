@@ -1,0 +1,13 @@
+dataset_name: quebec_trees
+data_path: ${hydra:runtime.cwd}/birch-trees/datasets/quebec_trees
+categories_path: ${hydra:runtime.cwd}/birch-trees/datasets/quebec_trees/quebec_trees_categories.json
+stats_id_path: ${hydra:runtime.cwd}/birch-trees/datasets/quebec_trees/stats_quebec_trees_by_id.json
+allometry_path: ${hydra:runtime.cwd}/birch-trees/datasets/quebec_trees/tree_allometry_regression_results_log_quebec_trees.csv
+n_classes: 17
+exclude_classes:
+  - 2 # "Pinopsida"
+  - 3 # "Magnoliopsida"
+  - 10 # "Acer L."
+height_attr: chm_p99_b10
+image_size: 512
+max_height: 30.0

@@ -1,0 +1,18 @@
+model_name: maskrcnn
+modalities:
+  - image
+  - dsm
+
+# Model architecture
+height_bin_size: 0.2
+
+# Optimization
+batch_size: 32
+accumulate_grad_batches: 2
+max_epochs: 100
+weight_decay: 0
+lr_head: 5e-5
+lr_reduction_backbone: 2
+warmup_epochs: 2
+warmup_lr: 2e-08
+min_lr: 2e-07

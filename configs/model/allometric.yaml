@@ -1,0 +1,7 @@
+model_name: allometric
+modalities:
+  - image
+
+radius_determination: rotated_rectangle
+
+batch_size: 64

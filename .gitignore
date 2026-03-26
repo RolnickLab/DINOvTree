@@ -1,0 +1,13 @@
+.hydra
+__pycache__
+.vscode
+*.egg-info/
+build/
+dist/
+external/hugobaudchon_geodataset/geodataset/_version.py
+outputs
+checkpoints
+birch-trees
+
+# User-specific DINOv3 weights URL mapping
+src/models/dinov3_model/core/dinov3_urls.json

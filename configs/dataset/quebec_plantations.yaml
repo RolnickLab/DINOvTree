@@ -1,0 +1,11 @@
+dataset_name: quebec_plantations
+data_path: ${hydra:runtime.cwd}/birch-trees/datasets/quebec_plantations
+categories_path: ${hydra:runtime.cwd}/birch-trees/datasets/quebec_plantations/quebec_plantations_categories.json
+stats_id_path: ${hydra:runtime.cwd}/birch-trees/datasets/quebec_plantations/stats_quebec_plantations_by_id.json
+allometry_path: ${hydra:runtime.cwd}/birch-trees/datasets/quebec_plantations/tree_allometry_regression_results_log_quebec_plantations.csv
+n_classes: 9
+exclude_classes:
+  - 7 # "Other"
+height_attr: chm_max_b10_lc
+image_size: 512
+max_height: 19.0

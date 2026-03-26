@@ -1,0 +1,28 @@
+model_name: resnet
+modalities:
+  - image
+
+# Model architecture
+backbone: resnet50
+use_sigmoid_for_height: false
+
+# Optimization
+batch_size: 64
+accumulate_grad_batches: 1
+max_epochs: 50
+weight_decay: 0
+lr_head: 5e-5
+lr_reduction_backbone: 2
+warmup_epochs: 2
+warmup_lr: 2e-08
+min_lr: 2e-07
+
+# Loss
+weighting_strategy: static
+cls_loss_name: cross_entropy
+cls_weight: 1.0
+label_smoothing: 0
+beta: 0.9999
+gamma: 2.0
+height_loss_name: smooth_l1
+height_weight: 1.0

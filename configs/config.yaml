@@ -1,0 +1,34 @@
+exp_name: debug
+group: null
+seed: 42
+debug: true
+
+tasks:
+  - classification
+
+num_workers: 11
+ckpt_path: null
+write_predictions: false
+test_results_path: test_results.csv
+
+
+num_train_media_logs: 2
+num_val_media_logs: 3
+num_test_media_logs: 3
+
+data_aug: true
+augmentations:
+  geo_p: 1.0
+
+defaults:
+  - _self_
+  - dataset: quebec_trees
+  - model: dinovtree
+  - experiment: dinovtree_qt
+
+hydra:
+  run:
+    dir: outputs/${hydra.job.name}/${exp_name}/${now:%Y-%m-%d_%H-%M-%S-%f}
+  job:
+    chdir: true
+  verbose: false
